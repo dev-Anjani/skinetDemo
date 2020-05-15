@@ -47,10 +47,13 @@ namespace API
             //          return new BadRequestObjectResult(errorResponse);
             //      }
             // );
-
+            services.AddCors(policy => policy.AddPolicy("CorsPolicy", builder =>
+               {
+                   builder.WithOrigins("https://localhost:4200").AllowAnyMethod().AllowAnyHeader();
+               }));
             services.AddApplicationServices();
             services.AddSwaggerDocumentation();
-            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,7 +66,7 @@ namespace API
 
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseStatusCodePagesWithReExecute("/errors/{0}");
-
+            app.UseCors("CorsPolicy");
             app.UseHttpsRedirection();
 
             app.UseRouting();
